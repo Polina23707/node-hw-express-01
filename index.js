@@ -3,21 +3,17 @@ const express = require('express');
 const logger = require('./middleware/logger')
 const error404 = require('./middleware/err-404')
 const indexRouter = require('./routes/index')
-// const demoRouter = require('./routes/demo')
-const booksRouter = require('./routes/books')
-const bookRouter = require('./routes/book')
 const userRouter = require('./routes/user')
+const booksRouter = require('./routes/books')
 
 const app = express();
 
 app.use(logger)
 
 app.use('/public', express.static(__dirname+'/public'))
-app.use('/', indexRouter)
-// app.use('/demo', demoRouter)
-app.use('/api/books', booksRouter)
-app.use('/api/books/:id', bookRouter)
+app.use('/api', indexRouter)
 app.use('/api/user/login', userRouter)
+app.use('/api/books', booksRouter)
 
 app.use(error404)
 
