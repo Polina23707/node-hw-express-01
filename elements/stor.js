@@ -1,4 +1,4 @@
-import Book from "./classes/Book";
+import Book from "../elements/Book";
 
 const stor = {
   books: [
