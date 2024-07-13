@@ -2,15 +2,11 @@ const express = require('express')
 const router = express.Router()
 const fileMulter = require('../middleware/file');
 
-// Не работает через импорт
-// import stor from '../elements/stor'
-// import Book from '../elements/Book'
-
 const {v4: uuid} = require('uuid');
 
 
 class Book {
-  constructor(id = uuid(), title = "", description = "", authors = "" , favorite = "", fileCover = "", fileName = "", fileBook = "https://i.work.ua/article/1161b.jpg?v=1713862773") {
+  constructor(id = uuid(), title = "title", description = "description", authors = "author" , favorite = "favorite", fileCover = "", fileName = "", fileBook = "https://i.work.ua/article/1161b.jpg?v=1713862773") {
     this.id = id
     this.title = title
     this.description = description
@@ -33,20 +29,29 @@ const stor = {
 
 router.get('/', (req, res) => {
     const {books} = stor
-    res.json(books)
+    res.render('index', {
+      title: 'Главная',
+      books: books,
+    })
 })
 .post('/', (req, res) => {
     const {books} = stor;
     const newBook = new Book();
     books.push(newBook);
-    res.send(newBook);
+    // res.send(newBook);
+    res.render('create')
 })
 .get('/:id', (req, res) => {
     const {books} = stor
     const {id} = req.params
     const idx = books.findIndex(el => el.id === id)
   
-    res.json(books[idx])
+    // res.json(books[idx])
+    const book = books[idx];
+    res.render('view', {
+      title: 'Конкретная книга',
+      book: book,
+    })
 })
 .delete('/:id', (req, res) => {
     const {books} = stor
@@ -72,17 +77,22 @@ router.get('/', (req, res) => {
       fileName,
       fileBook,
     }
-    res.json(books[idx])
+
+    const book = books[idx];
+    // res.json(books[idx])
+    res.render('update', {
+      book: book
+    })
 })
-.get('/:id/download', fileMulter.single('book'), (req, res) => {
-    if (req.fileBook) {
-        const {path} = req.fileBook;
-        console.log(path);
-        res.json(path);
-        res.download(path);
-        } else {
-        res.json(null);
-    }
-})
+// .get('/:id/download', fileMulter.single('book'), (req, res) => {
+//     if (req.fileBook) {
+//         const {path} = req.fileBook;
+//         console.log(path);
+//         res.json(path);
+//         res.download(path);
+//         } else {C
+//         res.json(null);
+//     }
+// })
 
 module.exports = router
