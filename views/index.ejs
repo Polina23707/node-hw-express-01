@@ -1,0 +1,8 @@
+<h1><%= title %></h1>
+<p>Главная</p> 
+<% books.map((el, idx) => {  %>
+  <tr>
+    <td><%= el.title %></td>
+    <td><%= el.id %></td>
+  </tr>
+<% }) %>
